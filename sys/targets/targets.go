@@ -128,6 +128,9 @@ const (
 	Trusty  = "trusty"
 	Windows = "windows"
 
+	// Kaspersky OS
+	KasperskyOS = "kasperskyos"
+
 	AMD64               = "amd64"
 	ARM64               = "arm64"
 	ARM                 = "arm"
@@ -448,6 +451,16 @@ var List = map[string]map[string]*Target{
 			NeedSyscallDefine: dontNeedSyscallDefine,
 		},
 	},
+	// Testing
+	KasperskyOS: {
+		ARM: {
+			PtrSize: 8,
+			PageSize:     4 << 10,
+			LittleEndian: true,
+			KernelHeaderArch: ARM,
+			CCompiler:        sourceDirVar + "/opt/KasperskyOS-Community-Edition-1.0.1.4/toolchain/bin/cmake",
+		},
+	},
 }
 
 var oses = map[string]osCommon{
@@ -542,6 +555,14 @@ var oses = map[string]osCommon{
 		SyscallNumbers:   true,
 		Int64SyscallArgs: true,
 		SyscallPrefix:    "__NR_",
+	},
+	KasperskyOS: {
+		BuildOS:   Linux,
+		SyscallNumbers: false,
+		ExecutorUsesShmem:      false,
+		ExecutorUsesForkServer: false,
+		HostFuzzer:             true,
+		ExecutorBin:            "syz-executor",
 	},
 }
 
